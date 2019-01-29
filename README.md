@@ -9,3 +9,5 @@ To serve the website from your PC:
 3. run the command: "bokeh serve --port 5010 --show --allow-websocket-origin=*"
 
 Prior to this, you should have installed Python v3+, and the python module called Bokeh. Make sure the bokeh.exe and pyton.exe file directories are added to your PATH variables.
+
+Raw data is coming from the Belgian Governement (https://statbel.fgov.be/en).
