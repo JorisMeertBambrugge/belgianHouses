@@ -9,7 +9,7 @@ import numpy as np
 from bokeh.plotting import figure
 from bokeh.io import show,curdoc,reset_output
 from bokeh.models import ColumnDataSource,Column,NumeralTickFormatter,Range1d,Row,GeoJSONDataSource,HoverTool,LinearColorMapper,Label,ColorBar
-from bokeh.models.widgets import Select,Slider,Button
+from bokeh.models.widgets import Select,Slider,Button,Div
 from bokeh.palettes import RdYlGn11
 
 def filterDB(place="Aalst",houseType="houses"):
@@ -29,7 +29,7 @@ commune1='Aalst'
 commune2='Leuven'
 typeList=list(set(list(df['Type'])))
 print(typeList)
-Yaxis='Mean Price'
+Yaxis='Price/m2'
 propertyType='houses'
 year=2017
 
@@ -53,7 +53,7 @@ def createMap():
     geo_source = GeoJSONDataSource(geojson=json.dumps(geoDictColored))#bokeh source
     
     tools = "pan,wheel_zoom,tap,reset"
-    countryMap = figure(title='',tools=tools,width=1000, height=700,x_axis_location=None, y_axis_location=None)
+    countryMap = figure(title='Belgian real estate transactions: average in euros by commune',tools=tools,width=1000, height=700,x_axis_location=None, y_axis_location=None)
     countryMap.xgrid.grid_line_color = None
     countryMap.ygrid.grid_line_color = None
     
@@ -95,7 +95,7 @@ def plotAvgTrend():
     source1 = ColumnDataSource(data=filterDB(place=commune1,houseType=propertyType))
     source2 = ColumnDataSource(data=filterDB(place=commune2,houseType=propertyType))
     
-    fig=figure()
+    fig=figure(width=700,title='Belgian real estate transactions 1973-2017: average trend in euros by commune and type')
     fig.line(x="CD_YEAR", y=Yaxis,color='blue',source=source1,legend=commune1)
     fig.line(x="CD_YEAR", y=Yaxis,color='red',source=source2,legend=commune2)
     fig.xaxis.axis_label = 'Year'
@@ -141,7 +141,7 @@ def YaxisChange(attr,old,new):
     print(new)
     Yaxis=new
     updatePlot()
-selectYaxis = Select(title="Y-axis:", value='Mean Price', options=['Mean Price','Price/m2'])
+selectYaxis = Select(title="Y-axis:", value='Price/m2', options=['Mean Price','Price/m2'])
 selectYaxis.on_change("value",YaxisChange)
 
 #set the type of property
@@ -168,8 +168,16 @@ def slider_update(attrname, old, new):
     
 slider = Slider(start=1973, end=2017, value=2017, step=1, title="Year")
 slider.on_change('value', slider_update)
-   
-graphColumn=Column(selectType,Row(selectCommune1,selectCommune2),fig,selectYaxis)
+  
+div = Div(text="""
+<p>All source data is from the Begian governement at <a href=https://statbel.fgov.be/en target="_blank">https://statbel.fgov.be/en</a>.</br>
+All data are averages.</br>
+For communes where no data was available at all the average was set at 0.</br>
+For years where no data was available the average was set to the same value as the year before.</br>
+<b>The interactive graph was made by <a href=mailto:JorisMeertBambrugge@gmail.com >Joris Meert</a> for educational purpose.</b></p>
+""",width=700, height=100)
+ 
+graphColumn=Column(selectType,Row(selectCommune1,selectCommune2),fig,selectYaxis,div)
 mapColum=Column(countryMap,Row(slider,button))
 layout=Row(graphColumn,mapColum)
 curdoc().add_root(layout)
