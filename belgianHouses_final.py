@@ -7,7 +7,7 @@ import json
 import numpy as np
 
 from bokeh.plotting import figure
-from bokeh.io import show,curdoc,reset_output
+from bokeh.io import curdoc
 from bokeh.models import ColumnDataSource,Column,NumeralTickFormatter,Range1d,Row,GeoJSONDataSource,HoverTool,LinearColorMapper,Label,ColorBar
 from bokeh.models.widgets import Select,Slider,Button,Div
 from bokeh.palettes import RdYlGn11
@@ -181,6 +181,3 @@ graphColumn=Column(selectType,Row(selectCommune1,selectCommune2),fig,selectYaxis
 mapColum=Column(countryMap,Row(slider,button))
 layout=Row(graphColumn,mapColum)
 curdoc().add_root(layout)
-
-reset_output()
-show(layout)
