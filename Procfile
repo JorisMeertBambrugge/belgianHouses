@@ -1,0 +1,1 @@
+eb: bokeh serve --port=$PORT --num-procs=0 --host=belgianhouses.herokuapp.com --address=0.0.0.0 --use-xheaders belgianHouses_final.py
