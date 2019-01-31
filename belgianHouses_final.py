@@ -181,3 +181,4 @@ graphColumn=Column(selectType,Row(selectCommune1,selectCommune2),fig,selectYaxis
 mapColum=Column(countryMap,Row(slider,button))
 layout=Row(graphColumn,mapColum)
 curdoc().add_root(layout)
+curdoc().title="Belgian house market"
